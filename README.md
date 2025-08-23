@@ -1,15 +1,140 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Lottie KMP
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-    - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-    - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-      For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-      the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-      Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-      folder is the appropriate location.
+A Kotlin Multiplatform project showcasing Lottie animation integration across Android and iOS platforms using Compose Multiplatform.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Features
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+- 🎬 **Cross-platform Lottie animations** using expect/actual declarations
+- 📱 **Android implementation** with lottie-compose library
+- 🍎 **iOS implementation** with native Lottie-iOS integration
+- 🔄 **URL-based animation loading** with async downloading
+- ⚙️ **Configurable iterations** (single play, repeat count, infinite loops)
+- 🎨 **Native UI integration** using UIKitView on iOS
+
+## Project Structure
+
+* [/composeApp](./composeApp/src) contains shared code across platforms:
+    - [commonMain](./composeApp/src/commonMain/kotlin) - Common code and expect declarations
+    - [androidMain](./composeApp/src/androidMain/kotlin) - Android actual implementations
+    - [iosMain](./composeApp/src/iosMain/kotlin) - iOS actual implementations
+    
+* [/iosApp](./iosApp/iosApp) contains the iOS application entry point and platform-specific code
+
+## Prerequisites
+
+- **Android Studio** (latest stable)
+- **Xcode** 15.0+ (for iOS development)
+- **CocoaPods** (for iOS dependencies)
+- **Kotlin Multiplatform** plugin
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd lottie-kmp
+```
+
+### 2. Android Setup
+
+Android dependencies are handled automatically via Gradle. Simply:
+
+```bash
+./gradlew build
+```
+
+### 3. iOS Setup
+
+#### Install CocoaPods (if not already installed):
+
+```bash
+# Install CocoaPods
+sudo gem install cocoapods
+
+# Verify installation
+pod --version
+```
+
+#### Install iOS Dependencies:
+
+```bash
+cd iosApp
+pod install
+cd ..
+```
+
+**Important:** After running `pod install`, always use `iosApp.xcworkspace` instead of `iosApp.xcodeproj` when opening the project in Xcode.
+
+### 4. Running the Project
+
+#### Android:
+- Open the project in Android Studio
+- Run the Android configuration
+
+#### iOS:
+- Open `iosApp/iosApp.xcworkspace` in Xcode (not .xcodeproj!)
+- Select a simulator or device
+- Run the project
+
+## Lottie Implementation
+
+### Common Interface (Expect)
+```kotlin
+@Composable
+expect fun LottieView(
+    url: String,
+    modifier: Modifier = Modifier,
+    iterations: Int = 1
+)
+```
+
+### Platform Implementations
+
+#### Android (Actual)
+Uses `lottie-compose` library with:
+- `LottieAnimation` composable
+- `rememberLottieComposition` for URL loading
+- Native iteration control
+
+#### iOS (Actual) 
+Uses `UIKitView` integration with:
+- Native iOS Lottie library via CocoaPods
+- URL-based JSON downloading
+- Native animation lifecycle management
+
+## Usage Example
+
+```kotlin
+LottieView(
+    url = "https://assets5.lottiefiles.com/packages/lf20_GoeyCV7pi2.json",
+    modifier = Modifier.size(200.dp),
+    iterations = -1 // Infinite loop
+)
+```
+
+## Dependencies
+
+### Android
+- `lottie-compose` 6.6.2
+
+### iOS
+- `lottie-ios` 4.4.1 (via CocoaPods)
+
+## Troubleshooting
+
+### iOS Build Issues
+1. **"Multiple commands produce .app"**: Clean build folder in Xcode (`Cmd+Shift+K`)
+2. **Missing Lottie framework**: Run `pod install` in `iosApp` directory
+3. **Can't find .xcworkspace**: Make sure to use `iosApp.xcworkspace`, not `.xcodeproj`
+
+### General Issues
+- Clean and rebuild: `./gradlew clean build`
+- Invalidate caches in Android Studio: File → Invalidate Caches and Restart
+
+## Learn More
+
+- [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
+- [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
+- [Lottie Android](https://github.com/airbnb/lottie-android)
+- [Lottie iOS](https://github.com/airbnb/lottie-ios)

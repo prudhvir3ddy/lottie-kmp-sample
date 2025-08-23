@@ -1,0 +1,6 @@
+language = Objective-C
+headers = LottieHelper.h
+headerFilter = *
+
+compilerOpts = -framework UIKit -framework Foundation
+linkerOpts = -framework UIKit -framework Foundation

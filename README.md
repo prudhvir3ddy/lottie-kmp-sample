@@ -116,10 +116,10 @@ LottieView(
 ## Dependencies
 
 ### Android
-- `lottie-compose` 6.6.2
+- `lottie-compose` 6.6.7
 
 ### iOS
-- `lottie-ios` 4.4.1 (via CocoaPods)
+- `lottie-ios` 4.5.2 (via CocoaPods)
 
 ## Troubleshooting
 

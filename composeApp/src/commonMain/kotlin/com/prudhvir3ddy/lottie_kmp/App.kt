@@ -1,26 +1,32 @@
 package com.prudhvir3ddy.lottie_kmp
 
+import KottieAnimation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
+import kottieComposition.KottieCompositionSpec
+import kottieComposition.animateKottieCompositionAsState
+import kottieComposition.rememberKottieComposition
 import lottie_kmp.composeapp.generated.resources.Res
 import lottie_kmp.composeapp.generated.resources.compose_multiplatform
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
@@ -43,10 +49,20 @@ fun App() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    LottieView(
-                        url = "https://assets5.lottiefiles.com/packages/lf20_GoeyCV7pi2.json",
-                        modifier = Modifier.width(200.dp).height(200.dp),
-                        iterations = -1
+
+                    val composition = rememberKottieComposition(
+                        spec = KottieCompositionSpec.Url("https://assets5.lottiefiles.com/packages/lf20_GoeyCV7pi2.json")
+                    )
+                    var playing by remember { mutableStateOf(true) }
+
+                    val animationState by animateKottieCompositionAsState(
+                        composition = composition,
+                        isPlaying = playing
+                    )
+                    KottieAnimation(
+                        composition = composition,
+                        progress = { animationState.progress },
+                        modifier = Modifier.size(300.dp)
                     )
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
                     Text("Compose: $greeting")
